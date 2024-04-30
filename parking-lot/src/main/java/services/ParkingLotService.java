@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ParkingLotService {
-    public static void createParkingLot(String command){
+    public static ParkingLot createParkingLot(String command){
         //create_parking_lot <parking_lot_id> <no_of_floors> <no_of_slots_per_floor>
         String[] commandSplit = command.split(" ");
         String parkingLotId = commandSplit[1];
@@ -16,7 +16,7 @@ public class ParkingLotService {
         int noOfSlotsPerFloor = Integer.valueOf(commandSplit[3]);
         //create the parking lot with specified floor and slots
         List<Floor> floors = createFloors(noOfFloors, parkingLotId, noOfSlotsPerFloor);
-        ParkingLot parkingLot = new ParkingLot(parkingLotId, floors);
+        return new ParkingLot(parkingLotId, floors);
     }
 
     public static List<Floor> createFloors(int noOfFloors, String parkingLotId, int noOfSlotsPerFloor){
@@ -37,8 +37,9 @@ public class ParkingLotService {
 
     public static List<ParkingSlot> createParkingSlots(int noOfSlotsPerFloor, Floor floor){
         List<ParkingSlot> slots = new ArrayList<>();
-        for(int j =0; j < noOfSlotsPerFloor; j++){
-           ParkingLotService.createParkingSlot(j+1, slots,floor);
+        for(int j = 0; j < noOfSlotsPerFloor; j++){
+            System.out.println("value of j: " + j);
+            ParkingLotService.createParkingSlot(j + 1, slots, floor);
         }
         return slots;
     }
@@ -49,6 +50,7 @@ public class ParkingLotService {
         if (slotNumber == 1) vehicleType = "truck";
         else if (slotNumber < 4) vehicleType = "bike";
         else vehicleType = "car";
-        slots.add(new ParkingSlot(slotNumber, floor, vehicleType));
+        ParkingSlot slot = new ParkingSlot(slotNumber, floor, vehicleType);
+        slots.add(slot);
     }
 }
