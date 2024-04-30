@@ -16,7 +16,7 @@ public class ParkingLotService {
         int noOfSlotsPerFloor = Integer.valueOf(commandSplit[3]);
         //create the parking lot with specified floor and slots
         List<Floor> floors = createFloors(noOfFloors, parkingLotId, noOfSlotsPerFloor);
-        return new ParkingLot(parkingLotId, floors);
+        return new ParkingLot(parkingLotId, floors, noOfFloors, noOfSlotsPerFloor);
     }
 
     public static List<Floor> createFloors(int noOfFloors, String parkingLotId, int noOfSlotsPerFloor){
@@ -38,7 +38,6 @@ public class ParkingLotService {
     public static List<ParkingSlot> createParkingSlots(int noOfSlotsPerFloor, Floor floor){
         List<ParkingSlot> slots = new ArrayList<>();
         for(int j = 0; j < noOfSlotsPerFloor; j++){
-            System.out.println("value of j: " + j);
             ParkingLotService.createParkingSlot(j + 1, slots, floor);
         }
         return slots;
