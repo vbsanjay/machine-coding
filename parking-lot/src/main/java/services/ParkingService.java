@@ -7,6 +7,7 @@ import java.util.List;
 
 public class ParkingService {
     static HashMap<Integer, Ticket> ticketMap = new HashMap<Integer, Ticket>();
+
     public static void parkVehicle(String vehicleType, String regNo, String color, ParkingLot parkingLot){
         Vehicle vehicle = new Vehicle(vehicleType, regNo, color);
         ParkingSlot availableSlot = ParkingService.getFirstAvailableSlot(vehicleType, parkingLot);
@@ -60,6 +61,8 @@ public class ParkingService {
 
     public static Ticket generateTicket(ParkingLot parkingLot, ParkingSlot slotToBeBooked, Vehicle vehicle){
         slotToBeBooked.setFree(false);
+        ParkingLotService.freeSlots.remove(slotToBeBooked);
+        ParkingLotService.occupiedSlots.add(slotToBeBooked);
         vehicle.setFloor(slotToBeBooked.getFloor());
         vehicle.setParkingSlot(slotToBeBooked);
         Ticket ticket = new Ticket(parkingLot, slotToBeBooked.getFloor(), slotToBeBooked, vehicle);

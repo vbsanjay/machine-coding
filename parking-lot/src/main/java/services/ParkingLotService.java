@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ParkingLotService {
+    static List<ParkingSlot> occupiedSlots = new ArrayList<>();
+    static List<ParkingSlot> freeSlots = new ArrayList<>();
     public static ParkingLot createParkingLot(String command){
         //create_parking_lot <parking_lot_id> <no_of_floors> <no_of_slots_per_floor>
         String[] commandSplit = command.split(" ");
@@ -50,6 +52,7 @@ public class ParkingLotService {
         else if (slotNumber < 4) vehicleType = "bike";
         else vehicleType = "car";
         ParkingSlot slot = new ParkingSlot(slotNumber, floor, vehicleType);
+        freeSlots.add(slot);
         slots.add(slot);
     }
 }

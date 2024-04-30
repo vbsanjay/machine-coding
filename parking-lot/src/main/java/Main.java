@@ -44,7 +44,7 @@ public class Main {
                     break;
                 }
                 case "display":{
-                    DisplayService.displaySomething();
+                    DisplayService.displayData(commandSplit[1], commandSplit[2], parkingLot);
                     break;
                 }
                 default:{
