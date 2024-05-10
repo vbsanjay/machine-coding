@@ -1,16 +1,45 @@
 package models;
 
 public class Ride {
+    private static int idProvider = 1;
+    private int id;
+    private int customerID;
     private int startPoint;
     private int endPoint;
     private TimeSlot timeSlot;
     private int Amount;
 
-    public Ride(int startPoint, int endPoint, TimeSlot timeSlot, int amount) {
+    public Ride(int customerID, int startPoint, int endPoint, TimeSlot timeSlot, int amount) {
+        this.id = idProvider++;
+        this.customerID = customerID;
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.timeSlot = timeSlot;
         Amount = amount;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public static int getIdProvider() {
+        return idProvider;
+    }
+
+    public static void setIdProvider(int idProvider) {
+        Ride.idProvider = idProvider;
+    }
+
+    public int getCustomerID() {
+        return customerID;
+    }
+
+    public void setCustomerID(int customerID) {
+        this.customerID = customerID;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getStartPoint() {

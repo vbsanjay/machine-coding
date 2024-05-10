@@ -21,14 +21,15 @@ public class BookingService {
         Optional<Taxi> optionalTaxi = bookNearestTaxi(points, pickupPoint, pickupTime);
         if (optionalTaxi.isPresent()) { // Check if a taxi is found
             Taxi availableTaxi = optionalTaxi.get(); // Get the actual Taxi object
+
             // Proceed with booking the taxi
-            System.out.println("Taxi can be allocated ✅");
-            System.out.println("Taxi - " + availableTaxi.getId() + " is allotted 🚕");
+            PrintService.taxiConfirmation(availableTaxi.getId());
+
             // additional booking logic...
             dropTime = calculateDropTime(pickupTime, pickupPoint, dropPoint);
             TimeSlot timeSlot = new TimeSlot(pickupTime, dropTime);
             rideAmount = calculateRideAmount(pickupPoint, dropPoint);
-            Ride ride = new Ride(pickupPoint, dropPoint, timeSlot, rideAmount);
+            Ride ride = new Ride(customerID, pickupPoint, dropPoint, timeSlot, rideAmount);
             availableTaxi.getRides().add(ride);
             availableTaxi.setTotalEarning(availableTaxi.getTotalEarning() + rideAmount);
             availableTaxi.getOccupiedTimeSlots().add(timeSlot);
@@ -71,13 +72,15 @@ public class BookingService {
     }
 
     public int calculateDropTime(int pickupTime, int pickupPoint, int dropPoint){
-        return pickupTime + (dropPoint - pickupPoint);
+        return pickupTime + Math.abs(dropPoint - pickupPoint);
     }
 
     public int calculateRideAmount(int pickupPoint, int dropPoint){
         int amount = 0;
-        for(int i = pickupPoint; i < dropPoint; i++){
-            if(i == pickupPoint) amount = amount + 150;
+        int start = Math.min(pickupPoint, dropPoint);
+        int end = Math.max(pickupPoint, dropPoint);
+        for(int i = start; i < end; i++){
+            if(i == start) amount = amount + 150;
             else amount = amount + 100;
         }
         return amount;

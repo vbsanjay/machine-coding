@@ -20,7 +20,7 @@ public class UserCommandService {
                     break;
                 case 2:
                     DisplayService displayService = new DisplayService();
-                    displayService.showAllTaxiDetails();
+                    displayService.showAllTaxiDetails(taxis);
                     break;
                 case 3:
                     loop = false;

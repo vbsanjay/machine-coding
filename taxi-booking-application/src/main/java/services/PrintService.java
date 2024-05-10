@@ -12,9 +12,9 @@ public class PrintService {
         System.out.println("Enter the number of Taxi in our application 🚕: ");
     }
     public static void getWhatUserNeedToDo(){
-        System.out.println("1. Book a Taxi 🔍: ");
-        System.out.println("2. Display Taxi Details 📝: ");
-        System.out.println("3. Exit 🚪: ");
+        System.out.println("1. Book a Taxi 🔍");
+        System.out.println("2. Display Taxi Details 📝");
+        System.out.println("3. Exit 🚪");
     }
     public static void printGetCustomerID(){
         System.out.println("Customer ID 🪪: ");
@@ -30,5 +30,10 @@ public class PrintService {
     }
     public static void invalidOption(){
         System.out.println("❌ Invalid option. Please try again. ❌");
+    }
+
+    public static void taxiConfirmation(int id){
+        System.out.println("Taxi can be allocated ✅");
+        System.out.println("Taxi - " + id + " is allotted 🚕");
     }
 }
