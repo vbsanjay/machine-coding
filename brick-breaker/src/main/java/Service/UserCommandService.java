@@ -14,9 +14,11 @@ public class UserCommandService {
                 }
                 case 2:{
                     MoveService.moveLeft();
+                    break;
                 }
                 case 3:{
                     MoveService.moveRight();
+                    break;
                 }
                 case 4:{
                     isCurrentGameNotOver = false;
