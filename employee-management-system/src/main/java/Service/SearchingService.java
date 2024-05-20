@@ -42,36 +42,45 @@ public class SearchingService {
         int getOperation = UserInputOutputService.fetchOperationFromUser();
         switch(getOperation){
             case 1:
-                checkStringEquals(searchField);
+                stringSearchingCommonLogic(searchField, "EQUALS");
                 break;
             case 2:
-                checkStringNotEquals(searchField);
+                stringSearchingCommonLogic(searchField, "NOT_EQUALS");
                 break;
             case 3:
-                checkStringContains(searchField);
+                stringSearchingCommonLogic(searchField, "CONTAINS");
                 break;
             case 4:
-                checkStringNotContains(searchField);
+                stringSearchingCommonLogic(searchField, "NOT_CONTAINS");
                 break;
             case 5:
-                checkStringStartsWith(searchField);
+                stringSearchingCommonLogic(searchField, "STARTS_WITH");
                 break;
             case 6:
-                checkStringEndsWith(searchField);
+                stringSearchingCommonLogic(searchField, "ENDS_WITH");
                 break;
         }
     }
-    public static void stringSearchingCommonLogic(String operation, String searchField){
+    public static void stringSearchingCommonLogic(String searchField, String operation){
         String stringToSearch = UserInputOutputService.fetchStingFromUser(searchField);
         List<Employee> tempList = new ArrayList<>(searchResult);
         for(Employee employee: tempList){
+            if(employee.getDesignation().equals("CEO")){
+                searchResult.remove(employee);
+                continue;
+            }
             Field[] fields = Employee.class.getDeclaredFields();
             for (Field field : fields) {
                 field.setAccessible(true);
                 try {
                     Object value = field.get(employee);
                     if (value instanceof String && field.getName().equalsIgnoreCase(searchField) ) {
-                        stringSearchingCoreLogic(operation,stringToSearch, (String) value, employee);
+                        stringSearchingCoreLogic(operation, stringToSearch.toLowerCase(), ((String) value).toLowerCase(), employee);
+                    }
+                    else if(value instanceof Employee && field.getName().equalsIgnoreCase(searchField)) {
+                        String reportingToName = ((Employee) value).getEmpName();
+                        //System.out.println(reportingToName);
+                        stringSearchingCoreLogic(operation, stringToSearch.toLowerCase(), reportingToName.toLowerCase(), employee);
                     }
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
@@ -82,179 +91,63 @@ public class SearchingService {
     }
     public static void stringSearchingCoreLogic(String operation, String stringToSearch, String value, Employee employee){
         if(operation.equals("EQUALS")){
-            if(!stringToSearch.equalsIgnoreCase((String)value)){
+            if(!stringToSearch.equalsIgnoreCase(value)){
                 searchResult.remove(employee);
             }
         }
         else if(operation.equals("NOT_EQUALS")){
-
+            if (stringToSearch.equalsIgnoreCase(value))
+                searchResult.remove(employee);
         }
         else if(operation.equals("CONTAINS")){
-
+            if ( (value).contains(stringToSearch) ){
+                searchResult.remove(employee);
+            }
         }
         else if(operation.equals("NOT_CONTAINS")){
-
+            if ( (value).contains(stringToSearch) ){
+                searchResult.remove(employee);
+            }
         }
         else if(operation.equals("STARTS_WITH")){
-
+            if ( !(value).startsWith(stringToSearch) ){
+                searchResult.remove(employee);
+            }
         }
         else if(operation.equals("ENDS_WITH")){
-
-        }
-    }
-    public static void checkStringEquals(String searchField){
-        String stringToSearch = UserInputOutputService.fetchStingFromUser(searchField);
-        List<Employee> tempList = new ArrayList<>(searchResult);
-        for(Employee employee: tempList){
-            Field[] fields = Employee.class.getDeclaredFields();
-            for (Field field : fields) {
-                field.setAccessible(true);
-                try {
-                    Object value = field.get(employee);
-                    if (value instanceof String && field.getName().equalsIgnoreCase(searchField) ) {
-                        if(!stringToSearch.equalsIgnoreCase((String)value)){
-                            searchResult.remove(employee);
-                        }
-                    }
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+            if ( !(value).endsWith(stringToSearch) ){
+                searchResult.remove(employee);
             }
         }
-        DisplayService.displayAllEmployeeDetailInTable(searchResult);
     }
-
-    public static void checkStringNotEquals(String searchField){
-        String stringToSearch = UserInputOutputService.fetchStingFromUser(searchField);
-        List<Employee> tempList = new ArrayList<>(searchResult);
-        for(Employee employee: tempList){
-            Field[] fields = Employee.class.getDeclaredFields();
-            for (Field field : fields) {
-                field.setAccessible(true);
-                try {
-                    Object value = field.get(employee);
-                    if (value instanceof String && field.getName().equalsIgnoreCase(searchField)) {
-                        if (stringToSearch.equalsIgnoreCase((String)value))
-                            searchResult.remove(employee);
-                    }
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        DisplayService.displayAllEmployeeDetailInTable(searchResult);
-    }
-
-    public static void checkStringContains(String searchField){
-        String stringToSearch = UserInputOutputService.fetchStingFromUser(searchField);
-        List<Employee> tempList = new ArrayList<>(searchResult);
-        for(Employee employee: tempList){
-            Field[] fields = Employee.class.getDeclaredFields();
-            for (Field field : fields) {
-                field.setAccessible(true);
-                try {
-                    Object value = field.get(employee);
-                    if (value instanceof String && field.getName().equalsIgnoreCase(searchField)) {
-                        if ( !((String) value).contains(stringToSearch) ){
-                            searchResult.remove(employee);
-                        }
-                    }
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        DisplayService.displayAllEmployeeDetailInTable(searchResult);
-    }
-
-    public static void checkStringNotContains(String searchField){
-        String stringToSearch = UserInputOutputService.fetchStingFromUser(searchField);
-        List<Employee> tempList = new ArrayList<>(searchResult);
-        for(Employee employee: tempList){
-            Field[] fields = Employee.class.getDeclaredFields();
-            for (Field field : fields) {
-                field.setAccessible(true);
-                try {
-                    Object value = field.get(employee);
-                    if (value instanceof String && field.getName().equalsIgnoreCase(searchField)) {
-                        if ( ((String) value).contains(stringToSearch) ){
-                            searchResult.remove(employee);
-                        }
-                    }
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        DisplayService.displayAllEmployeeDetailInTable(searchResult);
-    }
-
-    public static void checkStringStartsWith(String searchField){
-        String stringToSearch = UserInputOutputService.fetchStingFromUser(searchField);
-        List<Employee> tempList = new ArrayList<>(searchResult);
-        for(Employee employee: tempList){
-            Field[] fields = Employee.class.getDeclaredFields();
-            for (Field field : fields) {
-                field.setAccessible(true);
-                try {
-                    Object value = field.get(employee);
-                    if (value instanceof String && field.getName().equalsIgnoreCase(searchField)) {
-                        if ( !((String) value).startsWith(stringToSearch) ){
-                            searchResult.remove(employee);
-                        }
-                    }
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        DisplayService.displayAllEmployeeDetailInTable(searchResult);
-    }
-    public static void checkStringEndsWith(String searchField){
-        String stringToSearch = UserInputOutputService.fetchStingFromUser(searchField);
-        List<Employee> tempList = new ArrayList<>(searchResult);
-        for(Employee employee: tempList){
-            Field[] fields = Employee.class.getDeclaredFields();
-            for (Field field : fields) {
-                field.setAccessible(true);
-                try {
-                    Object value = field.get(employee);
-                    if (value instanceof String && field.getName().equalsIgnoreCase(searchField)) {
-                        if ( !((String) value).endsWith(stringToSearch) ){
-                            searchResult.remove(employee);
-                        }
-                    }
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        DisplayService.displayAllEmployeeDetailInTable(searchResult);
-    }
-
     public static void doIntegerOperation(String searchField) {
         int getOperation = UserInputOutputService.fetchIntegerOperationFromUser();
         //<, >, =, !=, between
         switch(getOperation){
             case 1:
-                checkIntegerLesserThan(searchField);
+                //checkIntegerLesserThan(searchField);
+                integerSearchingCommonLogic(searchField, "LESSER_THAN");
                 break;
             case 2:
-                checkIntegerGreaterThan(searchField);
+                //checkIntegerGreaterThan(searchField);
+                integerSearchingCommonLogic(searchField, "GREATER_THAN");
                 break;
             case 3:
-                checkIntegerEqualTo(searchField);
+                //checkIntegerEqualTo(searchField);
+                integerSearchingCommonLogic(searchField, "EQUAL_TO");
                 break;
             case 4:
-                checkIntegerNotEqualTo(searchField);
+                //checkIntegerNotEqualTo(searchField);
+                integerSearchingCommonLogic(searchField, "NOT_EQUAL_TO");
                 break;
             case 5:
                 checkIntegerBetween(searchField);
+                //integerSearchingCommonLogic(searchField, "LESSER_THAN");
                 break;
         }
     }
 
-    public static void checkIntegerLesserThan(String searchField){
+    public static void integerSearchingCommonLogic(String searchField, String operation) {
         int integerToSearch = UserInputOutputService.fetchIntegerFromUser(searchField);
         List<Employee> tempList = new ArrayList<>(searchResult);
         for(Employee employee: tempList){
@@ -264,9 +157,7 @@ public class SearchingService {
                 try {
                     Object value = field.get(employee);
                     if (value instanceof Integer && field.getName().equalsIgnoreCase(searchField)) {
-                        if ( (int)value >= integerToSearch ){
-                            searchResult.remove(employee);
-                        }
+                        integerSearchingCoreLogic(operation, (int)value, integerToSearch, employee);
                     }
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
@@ -275,68 +166,29 @@ public class SearchingService {
         }
         DisplayService.displayAllEmployeeDetailInTable(searchResult);
     }
-    public static void checkIntegerGreaterThan(String searchField){
-        int integerToSearch = UserInputOutputService.fetchIntegerFromUser(searchField);
-        List<Employee> tempList = new ArrayList<>(searchResult);
-        for(Employee employee: tempList){
-            Field[] fields = Employee.class.getDeclaredFields();
-            for (Field field : fields) {
-                field.setAccessible(true);
-                try {
-                    Object value = field.get(employee);
-                    if (value instanceof Integer && field.getName().equalsIgnoreCase(searchField)) {
-                        if ( (int)value <= integerToSearch ){
-                            searchResult.remove(employee);
-                        }
-                    }
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+
+    public static void integerSearchingCoreLogic(String operation, int value, int integerToSearch, Employee employee){
+        if(operation.equals("LESSER_THAN")){
+            if ( value >= integerToSearch ){
+                searchResult.remove(employee);
             }
         }
-        DisplayService.displayAllEmployeeDetailInTable(searchResult);
-    }
-    public static void checkIntegerEqualTo(String searchField){
-        int integerToSearch = UserInputOutputService.fetchIntegerFromUser(searchField);
-        List<Employee> tempList = new ArrayList<>(searchResult);
-        for(Employee employee: tempList) {
-            Field[] fields = Employee.class.getDeclaredFields();
-            for (Field field : fields) {
-                field.setAccessible(true);
-                try {
-                    Object value = field.get(employee);
-                    if (value instanceof Integer && field.getName().equalsIgnoreCase(searchField)) {
-                        if ((int) value != integerToSearch) {
-                            searchResult.remove(employee);
-                        }
-                    }
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+        else if(operation.equals("GREATER_THAN")){
+            if ( value <= integerToSearch ){
+                searchResult.remove(employee);
             }
         }
-        DisplayService.displayAllEmployeeDetailInTable(searchResult);
-    }
-    public static void checkIntegerNotEqualTo(String searchField){
-        int integerToSearch = UserInputOutputService.fetchIntegerFromUser(searchField);
-        List<Employee> tempList = new ArrayList<>(searchResult);
-        for(Employee employee: tempList) {
-            Field[] fields = Employee.class.getDeclaredFields();
-            for (Field field : fields) {
-                field.setAccessible(true);
-                try {
-                    Object value = field.get(employee);
-                    if (value instanceof Integer && field.getName().equalsIgnoreCase(searchField)) {
-                        if ((int) value == integerToSearch) {
-                            searchResult.remove(employee);
-                        }
-                    }
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+        else if(operation.equals("EQUAL_TO")){
+            if ( value != integerToSearch) {
+                searchResult.remove(employee);
             }
         }
-        DisplayService.displayAllEmployeeDetailInTable(searchResult);
+        else if(operation.equals("NOT_EQUAL_TO")){
+            if ((int) value == integerToSearch) {
+                searchResult.remove(employee);
+            }
+        }
+
     }
     public static void checkIntegerBetween(String searchField){
         int [] integerToSearch = UserInputOutputService.fetchIntegerBetweenFromUser(searchField);

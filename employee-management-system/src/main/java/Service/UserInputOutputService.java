@@ -5,8 +5,11 @@ import java.util.Scanner;
 public class UserInputOutputService {
     static Scanner sc = new Scanner(System.in);
     public static int fetchChoiceFromUser(){
+        System.out.println();
+        System.out.println("------- Choose your service -------");
         System.out.println("1. Display all employee details in table format");
         System.out.println("2. Search employee record");
+        System.out.println("3. Exit");
         return sc.nextInt();
     }
 
