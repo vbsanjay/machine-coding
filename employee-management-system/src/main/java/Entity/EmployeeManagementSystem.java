@@ -7,4 +7,12 @@ public class EmployeeManagementSystem {
     public EmployeeManagementSystem(List<Employee> employees) {
         this.employees = employees;
     }
+
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
+    }
 }

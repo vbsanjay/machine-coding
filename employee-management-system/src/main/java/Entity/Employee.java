@@ -2,18 +2,20 @@ package Entity;
 
 public class Employee {
     private int employeeId;
-    private String EmpName;
+    private String empName;
     private int age;
-    private String Designation;
-    private String Department;
-    private Employee ReportingTo;
+    private String designation;
+    private String department;
+    private Employee reportingTo;
 
-    public Employee(int employeeId, String empName, int age, String designation, String department) {
+    public Employee(int employeeId, String empName, int age, String designation, String department, Employee reportingTo) {
         this.employeeId = employeeId;
-        EmpName = empName;
+        this.empName = empName;
         this.age = age;
-        Designation = designation;
-        Department = department;
+        this.designation = designation;
+        this.department = department;
+        this.reportingTo = reportingTo;
+
     }
 
     public int getEmployeeId() {
@@ -25,11 +27,11 @@ public class Employee {
     }
 
     public String getEmpName() {
-        return EmpName;
+        return empName;
     }
 
     public void setEmpName(String empName) {
-        EmpName = empName;
+        this.empName = empName;
     }
 
     public int getAge() {
@@ -41,26 +43,32 @@ public class Employee {
     }
 
     public String getDesignation() {
-        return Designation;
+        return designation;
     }
 
     public void setDesignation(String designation) {
-        Designation = designation;
+        this.designation = designation;
     }
 
     public String getDepartment() {
-        return Department;
+        return department;
     }
 
     public void setDepartment(String department) {
-        Department = department;
+        this.department = department;
     }
 
     public Employee getReportingTo() {
-        return ReportingTo;
+        return reportingTo;
     }
 
     public void setReportingTo(Employee reportingTo) {
-        ReportingTo = reportingTo;
+        this.reportingTo = reportingTo;
+    }
+
+    @Override
+    public String toString() {
+        String temp_reportingTo =  (reportingTo != null)? reportingTo.getEmpName():"n/a";
+        return String.format("%-5d| %-20s| %-5d| %-20s| %-20s| %-20s|", employeeId, empName, age, designation, department, temp_reportingTo);
     }
 }
