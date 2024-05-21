@@ -17,6 +17,14 @@ public class UserCommand {
                     break;
                 }
                 case 3: {
+                    ReportingTreeService.printReportingTreeOfEmployee(employeeManagementSystem.getEmployees());
+                    break;
+                }
+                case 4: {
+                    EmployeesReportingService.printEmployeesReporting(employeeManagementSystem.getEmployees());
+                    break;
+                }
+                case 5: {
                     isAppRunning = false;
                     break;
                 }

@@ -9,7 +9,9 @@ public class UserInputOutputService {
         System.out.println("------- Choose your service -------");
         System.out.println("1. Display all employee details in table format");
         System.out.println("2. Search employee record");
-        System.out.println("3. Exit");
+        System.out.println("3. Print reporting tree of given employee");
+        System.out.println("4. Employees reporting to the given manager");
+        System.out.println("5. Exit");
         return sc.nextInt();
     }
 
@@ -70,5 +72,10 @@ public class UserInputOutputService {
         System.out.println("Please Enter the end " + property + ": ");
         startAndEndValue[1] = sc.nextInt();
         return startAndEndValue;
+    }
+
+    public static int fetchEmployeeIdForReportingTreeFromUser(){
+        System.out.println("Enter the Employee ID you need to print the employee tree");
+        return sc.nextInt();
     }
 }
