@@ -1,8 +1,6 @@
 package Service;
 
-import Entity.ChargingScheme;
-import Entity.Toll;
-import Entity.Vehicle;
+import Entity.*;
 import Repository.TollPaymentApplicationRepository;
 
 import java.util.ArrayList;
@@ -14,9 +12,14 @@ public class JourneyService {
         int startPoint = UserInputOutputService.fetchStartPointFromUser();
         int endPoint = UserInputOutputService.fetchEndPointFromUser();
         List<Toll> shortestTollPath = findShortestTollPath(startPoint, endPoint);
-        int amount = findTheTotalPaidInTolls(shortestTollPath, vehicle);
+        List<Bill> billsGenerated = new ArrayList<>();
+        int amount = findTheTotalPaidInTolls(shortestTollPath, vehicle, billsGenerated);
         System.out.println("The total Amount Paid: " + amount);
-        //Journey journey = new Journey(startPoint, endPoint, )
+        // Adding the journey to the vehicle
+        // This help to retrieve all the journey a vehicle has made
+        Journey journey = new Journey(startPoint, endPoint, amount, vehicle);
+        journey.setBills(billsGenerated);
+        vehicle.getJourneys().add(journey);
     }
 
     public static List<Toll> findShortestTollPath(int startPoint, int endPoint){
@@ -75,15 +78,31 @@ public class JourneyService {
         return shortestTollPath;
     }
 
-    public static int findTheTotalPaidInTolls(List<Toll> tollPath, Vehicle vehicle){
+    public static int findTheTotalPaidInTolls(List<Toll> tollPath, Vehicle vehicle, List<Bill> billsGenerated){
         String vehicleType = vehicle.getVehicleType();
+        boolean vip = vehicle.isVip();
         int totalAmount = 0;
         for(int i = 0; i < tollPath.size(); i++){
-            System.out.println("Vehicle crossing toll " + tollPath.get(i).getTollNumber() + "....");
-            ChargingScheme chargingSchemeAtToll = tollPath.get(i).getChargingScheme();
+            Toll currentToll = tollPath.get(i);
+            System.out.println("Vehicle crossing toll " + currentToll.getTollNumber() + "....");
+            ChargingScheme chargingSchemeAtToll = currentToll.getChargingScheme();
             int rateAtTheToll = getRateAtTheToll(vehicleType, chargingSchemeAtToll);
             System.out.println("Amount charger: " + rateAtTheToll);
+            // Check if the vehicle is VIP
+            if(vip){
+                int discount20 = (rateAtTheToll / 100) * 20;
+                System.out.println("VIP discount applied!!!");
+                System.out.printf("%10s %10s%n", "toll rate", "discount");
+                System.out.println("-----------------------");
+                System.out.printf("%10d %10d%n", rateAtTheToll, discount20);
+                rateAtTheToll = (vip)? rateAtTheToll - discount20:rateAtTheToll;
+            }
             totalAmount += rateAtTheToll;
+            // We generate bill at each toll.
+            // This helps to display the toll details.
+            Bill bill = new Bill(vehicle, currentToll, rateAtTheToll);
+            billsGenerated.add(bill);
+            currentToll.getBills().add(bill);
         }
         return totalAmount;
     }

@@ -6,12 +6,23 @@ import java.util.List;
 public class Vehicle {
     private int registrationNumber;
     private String vehicleType;
-    List<Journey> journeys;
+    private List<Journey> journeys;
+    private boolean vip;
 
     public Vehicle(int registrationNumber, String vehicleType) {
         this.registrationNumber = registrationNumber;
         this.vehicleType = vehicleType;
         this.journeys = new ArrayList<>();
+        if(registrationNumber % 5 == 0) this.vip = true;
+        else this.vip = false;
+    }
+
+    public boolean isVip() {
+        return vip;
+    }
+
+    public void setVip(boolean vip) {
+        this.vip = vip;
     }
 
     public int getRegistrationNumber() {

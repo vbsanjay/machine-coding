@@ -27,13 +27,14 @@ public class UserInputOutputService {
 
     public static Vehicle fetchTheVehicleToUseFromUser(List<Vehicle> vehicles){
         System.out.println("Pick a vehicle to use from below list");
-        System.out.printf("%5s %20s %20s%n", "Sl.no", "registrationNumber", "vehicleType");
-        System.out.println("--------------------------------------------------");
+        System.out.printf("%5s %20s %20s %10s%n", "Sl.no", "registrationNumber", "vehicleType", "vip");
+        System.out.println("-------------------------------------------------------------");
         for(int i = 0; i < vehicles.size(); i++){
             int registrationNumber = vehicles.get(i).getRegistrationNumber();
             String vehicleType = vehicles.get(i).getVehicleType();
             int slNo = i+ 1;
-            System.out.printf("%5d %20d %20s%n", slNo, registrationNumber, vehicleType);
+            boolean vip = vehicles.get(i).isVip();
+            System.out.printf("%5d %20d %20s %10b%n", slNo, registrationNumber, vehicleType, vip);
         }
         int slNoChoice = sc.nextInt();
         System.out.println("You have Chosen " + vehicles.get(slNoChoice - 1).getVehicleType() +  " with registrationNumber " + vehicles.get(slNoChoice - 1).getRegistrationNumber());
