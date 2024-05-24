@@ -12,13 +12,15 @@ public class LiftService {
         assignLift(startPoint, endPoint);
         DisplayService.displayLiftPositions();
     }
-    public static void assignLift(int startPoint, int endPoint){
+    public static void assignLift(int startP, int endP){
         // find the eligible lifts
-        List<Lift> eligibleLift = findEligibleLifts(startPoint, endPoint);
+        List<Lift> eligibleLift = findEligibleLifts(startP, endP);
         // find the shortest path of the eligible lift
         Comparator<Lift> customSort = new Comparator<Lift>() {
             @Override
             public int compare(Lift L1, Lift L2) {
+                int startPoint = startP;
+                int endPoint = endP;
                 // get the current position of lift for calculations
                 int L1position = L1.getFloorNumber();
                 int L2position = L2.getFloorNumber();
@@ -29,6 +31,11 @@ public class LiftService {
                 int L1travel = L1distance;
                 int L2travel = L2distance;
                 Map<Lift, List<Integer>> allowedFloorsTracker = LiftSystemRepository.getFloorsAllowedTracker();
+                if(startPoint > endPoint){
+                    int temp = startPoint;
+                    startPoint = endPoint;
+                    endPoint = temp;
+                }
                 for(int i = startPoint; i <= endPoint; i++){
                     List<Integer> availableFloors = allowedFloorsTracker.get(L1);
                     if(availableFloors.contains(i - 1)){
@@ -67,8 +74,8 @@ public class LiftService {
             return;
         }
         Lift liftNearest = eligibleLift.getFirst();
-        liftNearest.setFloorNumber(endPoint);
-        if(endPoint != 10 && startPoint < endPoint){
+        liftNearest.setFloorNumber(endP);
+        if(endP != 10 && startP < endP){
             liftNearest.setDown(false);
         }
         else{
